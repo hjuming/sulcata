@@ -826,7 +826,7 @@ function App() {
                 </p>
                 <div className="bg-gradient-to-r from-amber-50 to-orange-50 p-6 rounded-lg border-2 border-amber-200">
                   <p className="text-lg font-bold text-amber-800 text-center">
-                    牠龜如其名，背負厚重歲月，也期待著主人的細心照料與陪伴。
+                    蘇卡達龜如其名，背負厚重歲月，也期待著主人的細心照料與陪伴。
                   </p>
                   <p className="text-center text-gray-700 mt-2">
                     在您決定迎接這位行動坦克之前，請三思而行；一旦開始飼養，就讓我們以科學知識和愛心，給予蘇卡達象龜一個安全、舒適且長久的家吧！
