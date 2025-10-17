@@ -1,7 +1,6 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button.jsx'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card.jsx'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs.jsx'
 import { Home, Info, Thermometer, UtensilsCrossed, Heart, AlertTriangle, BookOpen, Menu, X } from 'lucide-react'
 import './App.css'
 
@@ -13,26 +12,54 @@ import tortoiseImg4 from './assets/igpGno8UkZoa.jpg'
 import tortoiseImg5 from './assets/ze1DH8nnVQWl.jpg'
 import tortoiseImg6 from './assets/1LFkBJ5XRUu4.jpg'
 
+// 定義 HeroImage 組件
+const HeroImage = ({ imageSrc, title, description }) => (
+  <div className="relative rounded-2xl overflow-hidden shadow-2xl mb-8">
+    <img 
+      src={imageSrc} 
+      alt={title} 
+      className="w-full h-64 md:h-96 object-cover"
+    />
+    <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end">
+      <div className="p-8 text-white">
+        <h2 className="text-3xl md:text-4xl font-bold mb-2">{title}</h2>
+        <p className="text-lg md:text-xl">{description}</p>
+      </div>
+    </div>
+  </div>
+);
+
 function App() {
   const [activeTab, setActiveTab] = useState('home')
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [activeTab]);
+
   const navigation = [
-    { id: 'home', name: '首頁', icon: Home },
-    { id: 'intro', name: '基本介紹', icon: Info },
-    { id: 'environment', name: '環境設置', icon: Thermometer },
-    { id: 'diet', name: '飲食管理', icon: UtensilsCrossed },
-    { id: 'health', name: '健康照護', icon: Heart },
-    { id: 'legal', name: '法規注意', icon: AlertTriangle },
+    { id: 'home', name: '首頁', icon: Home, heroTitle: '認識蘇卡達象龜', heroDescription: '世界第三大陸龜，需要專業照護與長期承諾', heroImage: tortoiseImg5 },
+    { id: 'intro', name: '基本介紹', icon: Info, heroTitle: '蘇卡達象龜基本介紹', heroDescription: '深入了解蘇卡達象龜的自然生態與習性', heroImage: tortoiseImg1 },
+    { id: 'environment', name: '環境設置', icon: Thermometer, heroTitle: '打造理想的飼養環境', heroDescription: '溫度、濕度、光照與空間配置指南', heroImage: tortoiseImg6 },
+    { id: 'diet', name: '飲食管理', icon: UtensilsCrossed, heroTitle: '蘇卡達象龜飲食指南', heroDescription: '高纖低蛋白，確保健康成長的飲食原則', heroImage: tortoiseImg4 },
+    { id: 'health', name: '健康照護', icon: Heart, heroTitle: '蘇卡達象龜健康管理', heroDescription: '預防常見疾病，提供最佳照護', heroImage: tortoiseImg3 },
+    { id: 'legal', name: '法規注意', icon: AlertTriangle, heroTitle: '飼養蘇卡達象龜的法規與責任', heroDescription: '了解法律規範，成為負責任的飼主', heroImage: tortoiseImg2 },
   ]
+
+  const handleTabClick = (id) => {
+    setActiveTab(id);
+    setMobileMenuOpen(false);
+  };
+
+  const currentTabInfo = navigation.find(item => item.id === activeTab);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-amber-50 to-orange-50">
       {/* Header */}
       <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-md shadow-md">
         <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between">
+            <div className="flex items-center gap-3 mb-4 md:mb-0">
               <div className="w-12 h-12 bg-gradient-to-br from-amber-600 to-orange-600 rounded-full flex items-center justify-center">
                 <BookOpen className="w-6 h-6 text-white" />
               </div>
@@ -50,7 +77,7 @@ function App() {
                   <Button
                     key={item.id}
                     variant={activeTab === item.id ? 'default' : 'ghost'}
-                    onClick={() => setActiveTab(item.id)}
+                    onClick={() => handleTabClick(item.id)}
                     className="gap-2"
                   >
                     <Icon className="w-4 h-4" />
@@ -64,7 +91,7 @@ function App() {
             <Button
               variant="ghost"
               size="icon"
-              className="md:hidden"
+              className="md:hidden absolute top-4 right-4"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
               {mobileMenuOpen ? <X /> : <Menu />}
@@ -80,10 +107,7 @@ function App() {
                   <Button
                     key={item.id}
                     variant={activeTab === item.id ? 'default' : 'ghost'}
-                    onClick={() => {
-                      setActiveTab(item.id)
-                      setMobileMenuOpen(false)
-                    }}
+                    onClick={() => handleTabClick(item.id)}
                     className="gap-2 justify-start"
                   >
                     <Icon className="w-4 h-4" />
@@ -98,24 +122,17 @@ function App() {
 
       {/* Main Content */}
       <main className="container mx-auto px-4 py-8">
+        {currentTabInfo && (
+          <HeroImage 
+            imageSrc={currentTabInfo.heroImage} 
+            title={currentTabInfo.heroTitle} 
+            description={currentTabInfo.heroDescription} 
+          />
+        )}
+
         {/* Home Section */}
         {activeTab === 'home' && (
           <div className="space-y-8 animate-in fade-in duration-500">
-            {/* Hero Section */}
-            <div className="relative rounded-2xl overflow-hidden shadow-2xl">
-              <img 
-                src={tortoiseImg5} 
-                alt="蘇卡達象龜" 
-                className="w-full h-96 object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end">
-                <div className="p-8 text-white">
-                  <h2 className="text-4xl font-bold mb-2">認識蘇卡達象龜</h2>
-                  <p className="text-xl">世界第三大陸龜，需要專業照護與長期承諾</p>
-                </div>
-              </div>
-            </div>
-
             {/* Quick Stats */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <Card className="hover:shadow-lg transition-shadow">
@@ -197,12 +214,24 @@ function App() {
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                  <img src={tortoiseImg1} alt="幼龜" className="rounded-lg shadow-md hover:scale-105 transition-transform" />
-                  <img src={tortoiseImg2} alt="幼龜照護" className="rounded-lg shadow-md hover:scale-105 transition-transform" />
-                  <img src={tortoiseImg3} alt="幼龜護理" className="rounded-lg shadow-md hover:scale-105 transition-transform" />
-                  <img src={tortoiseImg4} alt="成龜" className="rounded-lg shadow-md hover:scale-105 transition-transform" />
-                  <img src={tortoiseImg5} alt="成龜特寫" className="rounded-lg shadow-md hover:scale-105 transition-transform" />
-                  <img src={tortoiseImg6} alt="飼養環境" className="rounded-lg shadow-md hover:scale-105 transition-transform" />
+                  <div className="aspect-square overflow-hidden rounded-lg shadow-md hover:scale-105 transition-transform">
+                    <img src={tortoiseImg1} alt="幼龜" className="w-full h-full object-cover" />
+                  </div>
+                  <div className="aspect-square overflow-hidden rounded-lg shadow-md hover:scale-105 transition-transform">
+                    <img src={tortoiseImg2} alt="幼龜照護" className="w-full h-full object-cover" />
+                  </div>
+                  <div className="aspect-square overflow-hidden rounded-lg shadow-md hover:scale-105 transition-transform">
+                    <img src={tortoiseImg3} alt="幼龜護理" className="w-full h-full object-cover" />
+                  </div>
+                  <div className="aspect-square overflow-hidden rounded-lg shadow-md hover:scale-105 transition-transform">
+                    <img src={tortoiseImg4} alt="成龜" className="w-full h-full object-cover" />
+                  </div>
+                  <div className="aspect-square overflow-hidden rounded-lg shadow-md hover:scale-105 transition-transform">
+                    <img src={tortoiseImg5} alt="成龜特寫" className="w-full h-full object-cover" />
+                  </div>
+                  <div className="aspect-square overflow-hidden rounded-lg shadow-md hover:scale-105 transition-transform">
+                    <img src={tortoiseImg6} alt="飼養環境" className="w-full h-full object-cover" />
+                  </div>
                 </div>
               </CardContent>
             </Card>
@@ -793,7 +822,7 @@ function App() {
                   蘇卡達象龜作為龜中巨無霸，其生態習性和飼養需求都異於一般寵物龜。牠們需要高溫、寬敞、通風良好的環境，幼體階段特別需要高濕度以避免甲殼畸形；飲食上以高纖維草食為主，必須控制蛋白攝入並補充鈣質；日常照護要注意定期浸泡、維持水分供給，並防止低溫導致的健康問題。
                 </p>
                 <p className="text-gray-700">
-                  在台灣飼養蘇卡達，飼主需特別注意冬季保暖、防潮，以及守法飼養和長期承諾。只要用心滿足以上種種條件，蘇卡達象龜完全可以在人工環境中健康成長，展現其獨特的魅力。
+                  在台灣飼養蘇卡達，飼主需特別注意冬季保暖、防潮，以及守法飼養和長期承諾。
                 </p>
                 <div className="bg-gradient-to-r from-amber-50 to-orange-50 p-6 rounded-lg border-2 border-amber-200">
                   <p className="text-lg font-bold text-amber-800 text-center">
@@ -811,16 +840,20 @@ function App() {
 
       {/* Footer */}
       <footer className="bg-gray-800 text-white py-8 mt-16">
-        <div className="container mx-auto px-4">
-          <div className="text-center">
-            <h3 className="text-xl font-bold mb-2">蘇卡達象龜飼養指南</h3>
-            <p className="text-gray-400 mb-4">提供專業、全面的蘇卡達象龜飼養資訊</p>
-            <div className="flex justify-center gap-4 text-sm text-gray-400">
-              <span>© 2025 蘇卡達象龜飼養指南</span>
-              <span>|</span>
-              <span>僅供參考，實際飼養請諮詢專業獸醫</span>
-            </div>
-          </div>
+        <div className="container mx-auto px-4 text-center">
+          <h3 className="text-xl font-bold mb-2">蘇卡達象龜飼養指南</h3>
+          <p className="text-gray-400 mb-4">資訊整理僅供參考，實際飼養請諮詢專業獸醫</p>
+          <p className="text-sm text-gray-400 mb-2">
+            © 2025 <a href="https://sulcata.petsgo.pet" className="text-amber-400 hover:underline">蘇卡達象龜飼養指南</a>
+          </p>
+          <a 
+            href="https://manus.im/invitation/AHHDRYYJCP5MK" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            className="inline-flex items-center justify-center px-5 py-2 border border-transparent text-base font-medium rounded-md text-white bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 transition-colors duration-300"
+          >
+            邀請註冊Manus
+          </a>
         </div>
       </footer>
     </div>
