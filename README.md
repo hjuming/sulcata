@@ -52,7 +52,7 @@
     *   **Project name**：輸入您希望在 Cloudflare Pages 上顯示的專案名稱，例如 `sulcata-guide`。
     *   **Production branch**：選擇 `main` 或 `branch-1` (如果您主要使用 `branch-1` 分支)。
     *   **Build settings**：
-        *   **Framework preset**：選擇 `Vite` (本專案使用 Vite 構建 React 應用)。
+        *   **Framework preset**：選擇 `無` 或 `other` (本專案使用 Vite 構建 React 應用)。
         *   **Build command**：`pnpm run build`
         *   **Build output directory**：`dist`
     *   **Environment variables**：如果您的專案需要任何環境變數，可以在此處添加。
