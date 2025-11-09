@@ -57,20 +57,27 @@ function App() {
     <div className="min-h-screen bg-gradient-to-b from-amber-50 to-orange-50">
       {/* Header */}
       <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-md shadow-md">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between">
-            <div className="flex items-center gap-3 mb-4 md:mb-0">
+        <div
+          className="container mx-auto px-4 py-4"
+          style={{
+            paddingLeft: 'env(safe-area-inset-left)',
+            paddingRight: 'env(safe-area-inset-right)',
+          }}
+        >
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+            {/* 左側：Logo + 標題（不縮 + 保底寬度） */}
+            <div className="flex items-center gap-3 mb-4 md:mb-0 flex-shrink-0 min-w-[220px]">
               <div className="w-12 h-12 bg-gradient-to-br from-amber-600 to-orange-600 rounded-full flex items-center justify-center">
                 <BookOpen className="w-6 h-6 text-white" />
               </div>
-              <div>
+              <div className="whitespace-nowrap">
                 <h1 className="text-2xl font-bold text-gray-800">蘇卡達象龜飼養指南</h1>
                 <p className="text-sm text-gray-600">African Spurred Tortoise Care Guide</p>
               </div>
             </div>
-            
-            {/* Desktop Navigation */}
-            <nav className="hidden md:flex gap-2">
+
+            {/* Desktop Navigation（iPad 可水平滑動、不換行、項目不被擠壓） */}
+            <nav className="hidden md:flex gap-2 md:overflow-x-auto md:whitespace-nowrap md:[&>*]:shrink-0">
               {navigation.map((item) => {
                 const Icon = item.icon
                 return (
@@ -78,7 +85,8 @@ function App() {
                     key={item.id}
                     variant={activeTab === item.id ? 'default' : 'ghost'}
                     onClick={() => handleTabClick(item.id)}
-                    className="gap-2"
+                    size="sm"
+                    className="gap-2 md:px-3"
                   >
                     <Icon className="w-4 h-4" />
                     {item.name}
@@ -861,4 +869,3 @@ function App() {
 }
 
 export default App
-
